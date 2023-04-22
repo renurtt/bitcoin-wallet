@@ -6,5 +6,5 @@ public interface TransactionService {
      *
      * @return saved object
      */
-    Transaction saveTransaction(Transaction transaction);
+    Transaction saveTransaction(TransactionDTO transactionDTO);
 }

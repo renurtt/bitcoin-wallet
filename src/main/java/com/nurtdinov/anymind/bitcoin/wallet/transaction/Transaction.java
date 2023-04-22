@@ -1,9 +1,12 @@
 package com.nurtdinov.anymind.bitcoin.wallet.transaction;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -20,6 +23,9 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Long id;
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
     private OffsetDateTime datetime;
     private BigDecimal amount;
 }

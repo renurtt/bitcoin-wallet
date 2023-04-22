@@ -30,12 +30,11 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void saveCorrectTransactionTest() {
+    public void saveTransactionTest() {
         // given
         OffsetDateTime datetime = OffsetDateTime.of(2023, Month.APRIL.getValue(), 11,
                 20, 0, 0, 0, ZoneOffset.UTC);
-        Transaction transaction = new Transaction(0L,
-                datetime,
+        TransactionDTO transaction = new TransactionDTO(datetime,
                 new BigDecimal("100"));
         given(transactionRepository.save(any())).will(returnsFirstArg());
 
@@ -45,6 +44,23 @@ public class TransactionServiceTest {
         // then
         then(result.getAmount()).isEqualTo(new BigDecimal("100"));
         then(result.getDatetime()).isEqualTo(datetime);
-        verify(transactionRepository).save(transaction);
+        verify(transactionRepository).save(result);
+    }
+
+    @Test
+    public void saveTransactionWithZoneOffsetTest() {
+        // given
+        OffsetDateTime datetime = OffsetDateTime.of(2023, Month.APRIL.getValue(), 11,
+                20, 0, 0, 0, ZoneOffset.ofHoursMinutes(5, 30));
+        TransactionDTO transaction = new TransactionDTO(datetime,
+                new BigDecimal("100"));
+        given(transactionRepository.save(any())).will(returnsFirstArg());
+
+        // when
+        Transaction result = transactionService.saveTransaction(transaction);
+
+        // then
+         then(result.getDatetime()).isEqualTo(OffsetDateTime.parse("2023-04-11T14:30+00:00"));
+         then(result.getDatetime().getOffset()).isEqualTo(ZoneOffset.UTC);
     }
 }
