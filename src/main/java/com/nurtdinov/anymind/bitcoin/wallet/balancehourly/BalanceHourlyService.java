@@ -13,6 +13,7 @@ public interface BalanceHourlyService {
 
     /**
      * Calculates wallet balance at the end of each hour (exactly hourly) within given datetime period
+     *
      * @return collection of wallet balances hourly
      */
     List<BalanceHourly> getHourlyBalanceWithin(OffsetDateTime start, OffsetDateTime end);

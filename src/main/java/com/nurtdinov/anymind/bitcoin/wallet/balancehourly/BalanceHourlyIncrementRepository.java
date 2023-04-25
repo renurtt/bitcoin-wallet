@@ -10,8 +10,9 @@ import java.util.List;
 public interface BalanceHourlyIncrementRepository extends CrudRepository<BalanceHourlyIncrement, Long> {
     /**
      * finds balance increment records within given period of time
+     *
      * @param start lower datetime bound
-     * @param end upper datetime bound
+     * @param end   upper datetime bound
      * @return found records
      */
     List<BalanceHourlyIncrement> findAllByDatetimeBetweenOrderByDatetimeAsc(OffsetDateTime start, OffsetDateTime end);

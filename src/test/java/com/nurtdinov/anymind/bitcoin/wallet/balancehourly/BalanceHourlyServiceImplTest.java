@@ -79,9 +79,11 @@ public class BalanceHourlyServiceImplTest {
         BigDecimal walletBalanceAtStart = new BigDecimal("1000.1");
         given(balanceHourlyIncrementRepository.walletBalanceAt(any())).willReturn(new BigDecimal("1000.1"));
 
-        BalanceHourlyIncrement incrementRecord1 = new BalanceHourlyIncrement(0L, OffsetDateTime.parse("2023-04-11T14:00+00:00"),
+        BalanceHourlyIncrement incrementRecord1 = new BalanceHourlyIncrement(0L,
+                OffsetDateTime.parse("2023-04-11T14:00+00:00"),
                 new BigDecimal("101.1"));
-        BalanceHourlyIncrement incrementRecord2 = new BalanceHourlyIncrement(1L, OffsetDateTime.parse("2023-04-11T15:00+00:00"),
+        BalanceHourlyIncrement incrementRecord2 = new BalanceHourlyIncrement(1L,
+                OffsetDateTime.parse("2023-04-11T15:00+00:00"),
                 new BigDecimal("202.2"));
         given(balanceHourlyIncrementRepository.findAllByDatetimeBetweenOrderByDatetimeAsc(startDateTime, endDateTime))
                 .willReturn(List.of(incrementRecord1, incrementRecord2));
@@ -95,7 +97,8 @@ public class BalanceHourlyServiceImplTest {
         then(result.get(0).amount()).isEqualTo(incrementRecord1.getAmount().add(walletBalanceAtStart));
 
         then(result.get(1).datetime()).isEqualTo(incrementRecord2.getDatetime());
-        then(result.get(1).amount()).isEqualTo(incrementRecord2.getAmount().add(incrementRecord1.getAmount()).add(walletBalanceAtStart));
+        then(result.get(1).amount()).isEqualTo(
+                incrementRecord2.getAmount().add(incrementRecord1.getAmount()).add(walletBalanceAtStart));
     }
 
     @Test
@@ -108,7 +111,7 @@ public class BalanceHourlyServiceImplTest {
         given(balanceHourlyIncrementRepository.findAllByDatetimeBetweenOrderByDatetimeAsc(startDateTime, endDateTime))
                 .willReturn(List.of(
                         new BalanceHourlyIncrement(0L, OffsetDateTime.parse("2023-04-11T13:30:00+00:00"),
-                        new BigDecimal("101.1"))));
+                                new BigDecimal("101.1"))));
 
         // when
         List<BalanceHourly> result = balanceHourlyService.getHourlyBalanceWithin(startDateTime, endDateTime);

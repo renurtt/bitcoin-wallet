@@ -18,8 +18,7 @@ public class TransactionController {
 
     @PostMapping
     ResponseEntity<Transaction> saveTransaction(@RequestBody @Valid TransactionDTO transaction) {
-        log.info("New transaction: amount={}, datetime={}", transaction.amount(),
-                transaction.datetime());
+        log.info("New transaction: amount={}, datetime={}", transaction.amount(), transaction.datetime());
         return ResponseEntity.ok(transactionService.saveTransaction(transaction));
     }
 }

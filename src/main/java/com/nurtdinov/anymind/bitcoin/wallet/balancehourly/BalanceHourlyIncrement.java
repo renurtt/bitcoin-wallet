@@ -31,5 +31,4 @@ public class BalanceHourlyIncrement {
     private BigDecimal amount;
 
 
-
 }

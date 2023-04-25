@@ -24,8 +24,7 @@ public class Transaction {
     @GeneratedValue
     private Long id;
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
     private OffsetDateTime datetime;
     private BigDecimal amount;
 }
