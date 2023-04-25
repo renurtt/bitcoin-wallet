@@ -39,7 +39,7 @@ public class TransactionControllerTest {
     private JacksonTester<Transaction> jsonResponseTransaction;
 
     @Test
-    void postValidTransaction() throws Exception {
+    public void postValidTransactionTest() throws Exception {
         // given
         OffsetDateTime dateTimeNow = OffsetDateTime.now();
         TransactionDTO request = new TransactionDTO(dateTimeNow, new BigDecimal("100"));
@@ -59,10 +59,26 @@ public class TransactionControllerTest {
     }
 
     @Test
-    void postInvalidTransaction() throws Exception {
+    public void postInvalidDateTimeTransactionTest() throws Exception {
         // given
         OffsetDateTime dateTimeNow = OffsetDateTime.now().plusHours(1);
         TransactionDTO request = new TransactionDTO(dateTimeNow, new BigDecimal("100"));
+
+        // when
+        MockHttpServletResponse response = mvc.perform(post("/transaction")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequestTransaction.write(request).getJson()))
+                .andReturn().getResponse();
+
+        // then
+        then(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void postInvalidAmountTransactionTest() throws Exception {
+        // given
+        OffsetDateTime dateTimeNow = OffsetDateTime.now();
+        TransactionDTO request = new TransactionDTO(dateTimeNow, new BigDecimal("-100"));
 
         // when
         MockHttpServletResponse response = mvc.perform(post("/transaction")

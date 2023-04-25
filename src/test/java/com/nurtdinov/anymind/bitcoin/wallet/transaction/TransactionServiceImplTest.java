@@ -1,5 +1,6 @@
 package com.nurtdinov.anymind.bitcoin.wallet.transaction;
 
+import com.nurtdinov.anymind.bitcoin.wallet.balancehourly.BalanceHourlyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,15 +19,18 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceTest {
+public class TransactionServiceImplTest {
     private TransactionService transactionService;
 
     @Mock
     private TransactionRepository transactionRepository;
 
+    @Mock
+    private BalanceHourlyService balanceHourlyService;
+
     @BeforeEach
     void setUp() {
-        transactionService = new TransactionServiceImpl(transactionRepository);
+        transactionService = new TransactionServiceImpl(transactionRepository, balanceHourlyService);
     }
 
     @Test
@@ -37,6 +41,7 @@ public class TransactionServiceTest {
         TransactionDTO transaction = new TransactionDTO(datetime,
                 new BigDecimal("100"));
         given(transactionRepository.save(any())).will(returnsFirstArg());
+        given(balanceHourlyService.updateIncrementAtHour(any())).willReturn(null);
 
         // when
         Transaction result = transactionService.saveTransaction(transaction);
@@ -60,7 +65,8 @@ public class TransactionServiceTest {
         Transaction result = transactionService.saveTransaction(transaction);
 
         // then
-         then(result.getDatetime()).isEqualTo(OffsetDateTime.parse("2023-04-11T14:30+00:00"));
-         then(result.getDatetime().getOffset()).isEqualTo(ZoneOffset.UTC);
+        // check if timezone was set to UTC correctly
+        then(result.getDatetime()).isEqualTo(OffsetDateTime.parse("2023-04-11T14:30+00:00"));
+        then(result.getDatetime().getOffset()).isEqualTo(ZoneOffset.UTC);
     }
 }
