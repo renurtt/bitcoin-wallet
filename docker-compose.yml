@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+  bitcoin-wallet:
+    container_name: bitcoin-wallet
+    image: bitcoin-wallet
+    ports:
+      - '8080:8080'
+    build:
+      context: ./
+      dockerfile: .
+    environment:
+      - spring.datasource.url=jdbc:postgresql://db:5432/postgres
+      - spring.datasource.username=postgres
+      - spring.datasource.password=12345
+    depends_on:
+      - db
+volumes:
+  db:
+    driver: local
